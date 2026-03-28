@@ -53,7 +53,7 @@ Maya-Viveka extends the Maya affective SNN architecture to **harder CIL** on Spl
 
 Full experimental results visualised as a self-contained interactive dashboard — ablation study, accuracy matrices, affective dynamics per condition, Viveka trajectory, Bhaya quiescence panel, Vairagya saturation comparison, and Vedantic architecture overview.
 
-📊 **[maya_viveka_dashboard.html](maya_viveka_dashboard.html)** — download and open in any browser. No server required, no dependencies.
+📊 **[https://venky2099.github.io/Maya-Viveka/maya_viveka_dashboard.html](https://venky2099.github.io/Maya-Viveka/maya_viveka_dashboard.html)** — download and open in any browser. No server required, no dependencies.
 
 ---
 
