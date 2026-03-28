@@ -1,0 +1,1202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Maya-Viveka — Paper 5 Dashboard</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@400;500&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,300&display=swap');
+
+  :root {
+    --ink:     #1a1a2e;
+    --ink2:    #2e4057;
+    --muted:   #6b7280;
+    --border:  #e2e8f0;
+    --bg:      #f8f9fb;
+    --card:    #ffffff;
+    --accent:  #c0392b;
+    --accent2: #2e7d52;
+    --accent3: #1a5276;
+    --gold:    #b7860a;
+    --sanskrit:#7c3aed;
+    --viveka:  #0e7490;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--bg);
+    color: var(--ink);
+    min-height: 100vh;
+  }
+
+  /* ── Header ── */
+  .site-header {
+    background: var(--ink2);
+    color: white;
+    padding: 2.5rem 3rem 2rem;
+    position: relative;
+    overflow: hidden;
+  }
+  .site-header::before {
+    content: '';
+    position: absolute;
+    top: -40px; right: -60px;
+    width: 320px; height: 320px;
+    background: radial-gradient(circle, rgba(14,116,144,0.18) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .site-header::after {
+    content: '';
+    position: absolute;
+    bottom: -30px; left: 30%;
+    width: 200px; height: 200px;
+    background: radial-gradient(circle, rgba(124,58,237,0.1) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .header-eyebrow {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.5);
+    margin-bottom: 0.6rem;
+  }
+  .header-title {
+    font-family: 'DM Serif Display', serif;
+    font-size: 2.4rem;
+    line-height: 1.2;
+    margin-bottom: 0.4rem;
+    color: white;
+  }
+  .header-title em {
+    font-style: italic;
+    color: rgba(255,255,255,0.65);
+    font-size: 1.05rem;
+    display: block;
+    margin-top: 0.3rem;
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 300;
+  }
+  .header-meta {
+    display: flex;
+    gap: 2rem;
+    margin-top: 1.2rem;
+    flex-wrap: wrap;
+  }
+  .header-meta span {
+    font-size: 0.78rem;
+    color: rgba(255,255,255,0.55);
+    font-family: 'DM Mono', monospace;
+  }
+  .header-meta strong { color: rgba(255,255,255,0.9); }
+  .header-badge {
+    display: inline-block;
+    background: rgba(14,116,144,0.3);
+    border: 1px solid rgba(14,116,144,0.5);
+    color: rgba(255,255,255,0.9);
+    font-family: 'DM Mono', monospace;
+    font-size: 0.65rem;
+    padding: 0.2rem 0.6rem;
+    border-radius: 4px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  /* ── Layout ── */
+  .main { max-width: 1300px; margin: 0 auto; padding: 2rem 2rem 5rem; }
+
+  /* ── Section titles ── */
+  .section-title {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1rem;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin: 2.8rem 0 1rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid var(--border);
+  }
+
+  /* ── Key metrics strip ── */
+  .metrics-strip {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 1px;
+    background: var(--border);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    overflow: hidden;
+    margin-bottom: 0.5rem;
+  }
+  .metric-card {
+    background: var(--card);
+    padding: 1.4rem 1rem;
+    text-align: center;
+    transition: background 0.15s;
+  }
+  .metric-card:hover { background: #f0f4f8; }
+  .metric-card.highlight { background: #f0fdf4; }
+  .metric-card.danger { background: #fff7f7; }
+  .metric-label {
+    font-size: 0.65rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--muted);
+    font-family: 'DM Mono', monospace;
+    margin-bottom: 0.5rem;
+  }
+  .metric-value {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.9rem;
+    line-height: 1;
+    color: var(--ink2);
+  }
+  .metric-card.highlight .metric-value { color: var(--accent2); }
+  .metric-card.danger .metric-value { color: var(--accent); }
+  .metric-sub {
+    font-size: 0.65rem;
+    color: var(--muted);
+    margin-top: 0.3rem;
+  }
+  .metric-badge {
+    display: inline-block;
+    font-size: 0.6rem;
+    font-family: 'DM Mono', monospace;
+    background: #dcfce7;
+    color: var(--accent2);
+    padding: 0.1rem 0.4rem;
+    border-radius: 4px;
+    margin-top: 0.3rem;
+  }
+  .metric-badge.red { background: #fee2e2; color: var(--accent); }
+  .metric-badge.blue { background: #e0f2fe; color: var(--viveka); }
+
+  /* ── Grid layouts ── */
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
+  .three-col { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1.5rem; }
+  .col-3-2 { display: grid; grid-template-columns: 3fr 2fr; gap: 1.5rem; }
+  .col-2-3 { display: grid; grid-template-columns: 2fr 3fr; gap: 1.5rem; }
+
+  /* ── Chart card ── */
+  .chart-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 1.5rem;
+  }
+  .chart-title {
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 600;
+    font-size: 0.85rem;
+    color: var(--ink2);
+    margin-bottom: 0.25rem;
+  }
+  .chart-sub {
+    font-size: 0.72rem;
+    color: var(--muted);
+    margin-bottom: 1.2rem;
+    line-height: 1.5;
+  }
+
+  /* ── Bar chart ── */
+  .bar-chart { display: flex; flex-direction: column; gap: 0.65rem; }
+  .bar-row { display: flex; align-items: center; gap: 0.8rem; }
+  .bar-label {
+    font-size: 0.68rem;
+    font-family: 'DM Mono', monospace;
+    color: var(--muted);
+    width: 160px;
+    flex-shrink: 0;
+    text-align: right;
+  }
+  .bar-label strong { color: var(--ink2); }
+  .bar-track {
+    flex: 1;
+    height: 24px;
+    background: #f1f5f9;
+    border-radius: 4px;
+    overflow: hidden;
+    position: relative;
+  }
+  .bar-fill {
+    height: 100%;
+    border-radius: 4px;
+    transition: width 0.9s cubic-bezier(.4,0,.2,1);
+    display: flex;
+    align-items: center;
+    padding-left: 8px;
+  }
+  .bar-val {
+    font-size: 0.68rem;
+    font-family: 'DM Mono', monospace;
+    color: white;
+    font-weight: 500;
+  }
+  .bar-val-outside {
+    font-size: 0.68rem;
+    font-family: 'DM Mono', monospace;
+    color: var(--muted);
+    margin-left: 6px;
+  }
+
+  /* ── Accuracy matrix ── */
+  .matrix-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.68rem;
+  }
+  .matrix-table th, .matrix-table td {
+    border: 1px solid var(--border);
+    padding: 0.4rem 0.45rem;
+    text-align: center;
+  }
+  .matrix-table th {
+    background: var(--ink2);
+    color: white;
+    font-weight: 500;
+    font-size: 0.65rem;
+  }
+  .matrix-table tr:nth-child(even) td { background: #f8f9fb; }
+  .matrix-table td.diag { background: #e8f4e8; color: var(--accent2); font-weight: 700; }
+  .matrix-table td.nonzero { background: #fff7ed; color: #b45309; }
+  .matrix-table td.zero { color: #cbd5e1; }
+  .matrix-table td.collapse { background: #fff1f2; color: #be123c; }
+
+  /* ── Canvas charts ── */
+  canvas { display: block; }
+
+  /* ── Ablation table ── */
+  .ablation-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.78rem;
+  }
+  .ablation-table th, .ablation-table td {
+    border: 1px solid var(--border);
+    padding: 0.6rem 0.9rem;
+    text-align: center;
+  }
+  .ablation-table th {
+    background: var(--ink2);
+    color: white;
+    font-weight: 500;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.68rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+  .ablation-table td:first-child { text-align: left; font-weight: 500; color: var(--ink2); }
+  .ablation-table tr.main-result td { background: #f0fdf4; font-weight: 700; }
+  .ablation-table tr.collapse-row td { background: #fff1f2; }
+  .ablation-table tr:nth-child(even):not(.main-result):not(.collapse-row) td { background: #f8f9fb; }
+  .tick { color: var(--accent2); font-weight: 700; }
+  .cross { color: var(--muted); }
+  .delta-pos { color: var(--accent2); font-family: 'DM Mono', monospace; font-weight: 600; }
+  .delta-neg { color: var(--accent); font-family: 'DM Mono', monospace; font-weight: 600; }
+
+  /* ── Finding cards ── */
+  .findings-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; }
+  .finding-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 1.3rem;
+    border-left: 3px solid var(--accent);
+  }
+  .finding-card.green { border-left-color: var(--accent2); }
+  .finding-card.blue { border-left-color: var(--viveka); }
+  .finding-card.purple { border-left-color: var(--sanskrit); }
+  .finding-card.gold { border-left-color: var(--gold); }
+  .finding-num {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.62rem;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: 0.35rem;
+  }
+  .finding-title {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1rem;
+    color: var(--ink2);
+    margin-bottom: 0.45rem;
+  }
+  .finding-body {
+    font-size: 0.74rem;
+    color: var(--muted);
+    line-height: 1.65;
+  }
+  .finding-stat {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: var(--ink2);
+    display: block;
+    margin-top: 0.5rem;
+  }
+
+  /* ── Vedantic table ── */
+  .vedantic-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.78rem;
+  }
+  .vedantic-table th, .vedantic-table td {
+    border: 1px solid var(--border);
+    padding: 0.6rem 0.9rem;
+    text-align: left;
+  }
+  .vedantic-table th {
+    background: var(--ink2);
+    color: white;
+    font-weight: 500;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.68rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+  .vedantic-table tr.active td { background: #f0fdf4; }
+  .vedantic-table tr.new-p5 td { background: #e0f2fe; font-weight: 600; }
+  .vedantic-table tr.planned td { background: #fafaf0; color: var(--muted); font-style: italic; }
+  .sanskrit { font-family: 'DM Serif Display', serif; font-size: 1.1rem; color: var(--sanskrit); }
+  .status-badge {
+    display: inline-block;
+    font-size: 0.6rem;
+    font-family: 'DM Mono', monospace;
+    padding: 0.15rem 0.5rem;
+    border-radius: 3px;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+  .sb-active { background: #dcfce7; color: var(--accent2); }
+  .sb-new { background: #e0f2fe; color: var(--viveka); }
+  .sb-planned { background: #f3f4f6; color: var(--muted); }
+  .sb-named { background: #fef3c7; color: var(--gold); }
+
+  /* ── Mini line chart via SVG ── */
+  .sparkline { overflow: visible; }
+
+  /* ── Tab switcher ── */
+  .tab-bar {
+    display: flex;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+    flex-wrap: wrap;
+  }
+  .tab-btn {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.68rem;
+    padding: 0.35rem 0.8rem;
+    border: 1px solid var(--border);
+    background: var(--card);
+    color: var(--muted);
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.15s;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+  .tab-btn:hover { border-color: var(--ink2); color: var(--ink2); }
+  .tab-btn.active { background: var(--ink2); color: white; border-color: var(--ink2); }
+  .tab-panel { display: none; }
+  .tab-panel.active { display: block; }
+
+  /* ── Quiescence heatmap ── */
+  .quiescence-grid {
+    display: grid;
+    grid-template-columns: 100px repeat(10, 1fr);
+    gap: 2px;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.62rem;
+  }
+  .qg-header { color: var(--muted); text-align: center; padding: 0.3rem 0; }
+  .qg-label { color: var(--ink2); display: flex; align-items: center; font-size: 0.65rem; }
+  .qg-cell {
+    height: 28px;
+    border-radius: 3px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.6rem;
+    font-weight: 500;
+  }
+
+  /* ── Footer ── */
+  .footer {
+    margin-top: 4rem;
+    padding: 1.5rem 0;
+    border-top: 1px solid var(--border);
+    text-align: center;
+    font-size: 0.72rem;
+    color: var(--muted);
+    font-family: 'DM Mono', monospace;
+  }
+</style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════ HEADER ═══════════════════════════════ -->
+<header class="site-header">
+  <div class="header-eyebrow">Maya Research Series · Paper 5 · Nexus Learning Labs</div>
+  <h1 class="header-title">
+    Maya-Viveka
+    <em>Viveka-Gated Synaptic Discrimination for Class-Incremental Learning in Affective SNNs</em>
+  </h1>
+  <div style="margin-top:0.8rem; display:flex; gap:0.5rem; flex-wrap:wrap;">
+    <span class="header-badge">Split-CIFAR-100 · 10 Tasks</span>
+    <span class="header-badge">6-Condition Ablation</span>
+    <span class="header-badge">SpikingJelly 0.0.0.0.14</span>
+    <span class="header-badge">RTX 4060 8GB</span>
+  </div>
+  <div class="header-meta">
+    <span><strong>Venkatesh Swaminathan</strong> · BITS Pilani M.Sc. · Nexus Learning Labs, Bengaluru</span>
+    <span><strong>Benchmark</strong> Split-CIFAR-100 CIL · 10 tasks · 10 classes each</span>
+    <span><strong>Seed</strong> 42</span>
+    <span><strong>New dimension</strong> Viveka (विवेक) — cross-task synaptic discernment</span>
+  </div>
+</header>
+
+<main class="main">
+
+<!-- ═══════════════════════════════ KEY METRICS ═══════════════════════════════ -->
+<div class="section-title">Canonical Result — 50 Exemplars/Class Replay</div>
+<div class="metrics-strip">
+  <div class="metric-card highlight">
+    <div class="metric-label">Average Accuracy</div>
+    <div class="metric-value">16.03%</div>
+    <div class="metric-sub">Condition E · Viveka gain</div>
+    <div class="metric-badge">+9.21pp vs baseline</div>
+  </div>
+  <div class="metric-card">
+    <div class="metric-label">Backward Transfer</div>
+    <div class="metric-value">−50.5%</div>
+    <div class="metric-sub">BWT · forgetting rate</div>
+    <div class="metric-badge blue">+11.5pp vs baseline</div>
+  </div>
+  <div class="metric-card">
+    <div class="metric-label">Viveka vs Smriti</div>
+    <div class="metric-value">+0.63pp</div>
+    <div class="metric-sub">AA delta · E vs C</div>
+    <div class="metric-badge">Consistent gain</div>
+  </div>
+  <div class="metric-card danger">
+    <div class="metric-label">Ortho Head Penalty</div>
+    <div class="metric-value">−8.84pp</div>
+    <div class="metric-sub">AA delta · D vs C</div>
+    <div class="metric-badge red">Vairagya collapse</div>
+  </div>
+  <div class="metric-card">
+    <div class="metric-label">Bhaya Quiescence</div>
+    <div class="metric-value">0.000</div>
+    <div class="metric-sub">Tasks 1–9 · all replay conditions</div>
+    <div class="metric-badge blue">Replicated from P4</div>
+  </div>
+  <div class="metric-card">
+    <div class="metric-label">Buddhi Lock Epoch</div>
+    <div class="metric-value">Ep. 5</div>
+    <div class="metric-sub">Stable across all conditions</div>
+    <div class="metric-badge">Design determinism</div>
+  </div>
+</div>
+
+<!-- replay budget row -->
+<div class="two-col" style="margin-top:1rem;">
+  <div class="chart-card">
+    <div class="chart-title">Replay Budget Effect</div>
+    <div class="chart-sub">20 vs 50 exemplars/class — confirms replay budget as primary CIL bottleneck</div>
+    <div class="bar-chart">
+      <div class="bar-row">
+        <div class="bar-label">Run 1 · 20/class</div>
+        <div class="bar-track"><div class="bar-fill" style="width:74.7%;background:#94a3b8"><span class="bar-val">11.93%</span></div></div>
+        <div class="bar-val-outside">BWT −55.46%</div>
+      </div>
+      <div class="bar-row">
+        <div class="bar-label"><strong>Run 2 · 50/class ★</strong></div>
+        <div class="bar-track"><div class="bar-fill" style="width:100%;background:var(--accent2)"><span class="bar-val">16.03%</span></div></div>
+        <div class="bar-val-outside">BWT −50.50%</div>
+      </div>
+      <div style="margin-top:0.8rem; padding:0.6rem; background:#f0fdf4; border-radius:6px; font-size:0.72rem; color:var(--accent2);">
+        Δ +4.10pp AA · +4.96pp BWT from 2.5× more replay exemplars
+      </div>
+    </div>
+  </div>
+  <div class="chart-card">
+    <div class="chart-title">Within-Task Learning Strength</div>
+    <div class="chart-sub">Final-epoch confidence per task (Run 2) — strong learning despite poor cross-task retention</div>
+    <canvas id="withinTaskCanvas" height="130"></canvas>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════ ABLATION ═══════════════════════════════ -->
+<div class="section-title">Six-Condition Ablation Study</div>
+
+<table class="ablation-table">
+  <thead>
+    <tr>
+      <th style="text-align:left;">Condition</th>
+      <th>Replay</th>
+      <th>Vairagya</th>
+      <th>Buddhi</th>
+      <th>Viveka Gain</th>
+      <th>Ortho Head</th>
+      <th>AA (%)</th>
+      <th>BWT (%)</th>
+      <th>ΔAA vs Baseline</th>
+      <th>Vairagya Sat.</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>A · SGD Baseline</td>
+      <td><span class="cross">✗</span></td>
+      <td><span class="cross">✗</span></td>
+      <td><span class="cross">✗</span></td>
+      <td><span class="cross">✗</span></td>
+      <td><span class="cross">✗</span></td>
+      <td>6.82</td><td>−62.01</td>
+      <td>—</td>
+      <td>—</td>
+    </tr>
+    <tr>
+      <td>B · Replay Only</td>
+      <td><span class="tick">✓</span></td>
+      <td><span class="cross">✗</span></td>
+      <td><span class="cross">✗</span></td>
+      <td><span class="cross">✗</span></td>
+      <td><span class="cross">✗</span></td>
+      <td>15.32</td><td>−53.62</td>
+      <td class="delta-pos">+8.50</td>
+      <td>~0.59</td>
+    </tr>
+    <tr>
+      <td>C · Maya-Smriti</td>
+      <td><span class="tick">✓</span></td>
+      <td><span class="tick">✓</span></td>
+      <td><span class="tick">✓</span></td>
+      <td><span class="cross">✗</span></td>
+      <td><span class="cross">✗</span></td>
+      <td>15.40</td><td>−50.52</td>
+      <td class="delta-pos">+8.58</td>
+      <td>~0.47</td>
+    </tr>
+    <tr class="collapse-row">
+      <td>D · Maya-Smriti + Ortho</td>
+      <td><span class="tick">✓</span></td>
+      <td><span class="tick">✓</span></td>
+      <td><span class="tick">✓</span></td>
+      <td><span class="cross">✗</span></td>
+      <td><span class="tick">✓</span></td>
+      <td>6.56</td><td>−60.38</td>
+      <td class="delta-neg">−0.26</td>
+      <td style="color:var(--accent);font-weight:700;">~0.24 ⚠</td>
+    </tr>
+    <tr class="main-result">
+      <td>E · Viveka, learnable head ★</td>
+      <td><span class="tick">✓</span></td>
+      <td><span class="tick">✓</span></td>
+      <td><span class="tick">✓</span></td>
+      <td><span class="tick">✓</span></td>
+      <td><span class="cross">✗</span></td>
+      <td>16.03</td><td>−50.50</td>
+      <td class="delta-pos">+9.21</td>
+      <td>~0.47</td>
+    </tr>
+    <tr class="collapse-row">
+      <td>F · Full Maya-Viveka (E+D)</td>
+      <td><span class="tick">✓</span></td>
+      <td><span class="tick">✓</span></td>
+      <td><span class="tick">✓</span></td>
+      <td><span class="tick">✓</span></td>
+      <td><span class="tick">✓</span></td>
+      <td>6.66</td><td>−60.24</td>
+      <td class="delta-neg">−0.16</td>
+      <td style="color:var(--accent);font-weight:700;">~0.27 ⚠</td>
+    </tr>
+  </tbody>
+</table>
+
+<div style="margin-top:0.6rem; display:flex; gap:0.5rem; flex-wrap:wrap;">
+  <span style="font-size:0.68rem;font-family:'DM Mono',monospace;padding:0.2rem 0.6rem;background:#f0fdf4;border-radius:4px;color:var(--accent2);">★ = Canonical result</span>
+  <span style="font-size:0.68rem;font-family:'DM Mono',monospace;padding:0.2rem 0.6rem;background:#fff1f2;border-radius:4px;color:var(--accent);">⚠ = Vairagya collapse — prototype geometry suppresses consolidation</span>
+</div>
+
+<!-- ═══════════════════════════════ ACCURACY MATRICES ═══════════════════════════════ -->
+<div class="section-title">Accuracy Matrices R[trained_up_to][task_id]</div>
+
+<div class="tab-bar">
+  <button class="tab-btn active" onclick="switchMatrix('viveka')">E · Viveka (Canonical)</button>
+  <button class="tab-btn" onclick="switchMatrix('replay')">B · Replay Only</button>
+  <button class="tab-btn" onclick="switchMatrix('baseline')">A · Baseline</button>
+</div>
+
+<div id="mat-viveka" class="tab-panel active">
+  <div class="chart-card">
+    <div class="chart-title">Condition E — Maya-Viveka (Viveka gain, learnable head) · AA=16.03% · BWT=−50.50%</div>
+    <div class="chart-sub">Lower-triangular: diagonal = within-task accuracy, off-diagonal = cross-task retention. Orange = meaningful retention; grey = zero (unseen tasks).</div>
+    <div id="matrix-viveka-container"></div>
+  </div>
+</div>
+<div id="mat-replay" class="tab-panel">
+  <div class="chart-card">
+    <div class="chart-title">Condition B — Replay Only · AA=15.32% · BWT=−53.62%</div>
+    <div class="chart-sub">Baseline comparison: replay alone without affective mechanisms.</div>
+    <div id="matrix-replay-container"></div>
+  </div>
+</div>
+<div id="mat-baseline" class="tab-panel">
+  <div class="chart-card">
+    <div class="chart-title">Condition A — SGD Baseline · AA=6.82% · BWT=−62.01%</div>
+    <div class="chart-sub">No replay, no affective system. Pure catastrophic forgetting — diagonal only.</div>
+    <div id="matrix-baseline-container"></div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════ AFFECTIVE DYNAMICS ═══════════════════════════════ -->
+<div class="section-title">Affective Dynamics</div>
+
+<div class="two-col">
+  <!-- Bhaya Quiescence -->
+  <div class="chart-card">
+    <div class="chart-title">Bhaya Quiescence — Pain Signal Suppression Under Replay</div>
+    <div class="chart-sub">Mean Bhaya firing rate per task. Baseline escalates; all replay conditions quiesce to exactly 0.000 after Task 0 — emergent property replicated from P4.</div>
+    <canvas id="bhayaCanvas" height="160"></canvas>
+    <div style="margin-top:1rem;padding:0.7rem;background:#f0fdf4;border-radius:6px;font-size:0.72rem;color:var(--accent2);line-height:1.5;">
+      <strong>Emergent finding:</strong> Bhaya fires only during Task 0 (rate=0.024) across every replay condition, then drops to exactly 0.000 and stays there. Baseline continues escalating to 0.12+ as forgetting compounds. Consistent with P4 — a calm, replay-supported network does not experience nociceptive pain.
+    </div>
+  </div>
+
+  <!-- Buddhi S-Curve -->
+  <div class="chart-card">
+    <div class="chart-title">Buddhi S-Curve — Consolidation Gate Recovery</div>
+    <div class="chart-sub">Mean Buddhi per epoch across inter-task training (Tasks 1–9). Collapses at task boundary, recovers with experience. Identical across all conditions — architecturally deterministic.</div>
+    <canvas id="buddhiCanvas" height="160"></canvas>
+    <div style="margin-top:1rem;padding:0.7rem;background:#e0f2fe;border-radius:6px;font-size:0.72rem;color:var(--viveka);line-height:1.5;">
+      <strong>Design confirmation:</strong> Buddhi S-curve (0.10→0.30→0.50→0.70→0.90 at epochs 0–4, locks at 1.0 from epoch 5) is identical across all 6 ablation conditions. Buddhi is architecture-stable regardless of head type or Viveka presence.
+    </div>
+  </div>
+</div>
+
+<div class="two-col" style="margin-top:1.5rem;">
+  <!-- Vairagya comparison -->
+  <div class="chart-card">
+    <div class="chart-title">Vairagya Saturation — Ortho Head Collapse</div>
+    <div class="chart-sub">Mean Vairagya (final epoch) per task across key conditions. Ortho head suppresses saturation from ~0.47 to ~0.24 — the mechanistic cause of AA collapse in conditions D and F.</div>
+    <canvas id="vairagyaCanvas" height="180"></canvas>
+  </div>
+
+  <!-- V-fc1 protection -->
+  <div class="chart-card">
+    <div class="chart-title">V-fc1 Protection Trajectory</div>
+    <div class="chart-sub">Fraction of fc1 synapses under Vairagya protection (final epoch per task). Viveka extends protection further and decays more slowly than Maya-Smriti alone.</div>
+    <canvas id="vfc1Canvas" height="180"></canvas>
+  </div>
+</div>
+
+<!-- Viveka trajectory -->
+<div class="chart-card" style="margin-top:1.5rem;">
+  <div class="chart-title">Viveka Gain Trajectory — Cross-Task Synaptic Consistency (Run 2, 50/class)</div>
+  <div class="chart-sub">Mean Viveka score (final epoch) per task. Rises from 0.0 as the network accumulates cross-task experience, stabilises at 0.50–0.58 range. Viveka is a learned signal, not a fixed prior.</div>
+  <canvas id="vivekaCanvas" height="130"></canvas>
+</div>
+
+<!-- ═══════════════════════════════ BHAYA QUIESCENCE HEATMAP ═══════════════════════════════ -->
+<div class="section-title">Bhaya Quiescence Heatmap</div>
+<div class="chart-card">
+  <div class="chart-title">Mean Bhaya Firing Rate per Task — All Replay Conditions</div>
+  <div class="chart-sub">Green = quiescent (0.000). Orange/red = active firing. Baseline escalates; replay conditions show perfect quiescence from Task 1 onwards.</div>
+  <div style="margin-top:1rem;">
+    <div class="quiescence-grid" id="bhayaGrid"></div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════ KEY FINDINGS ═══════════════════════════════ -->
+<div class="section-title">Key Findings</div>
+<div class="findings-grid">
+  <div class="finding-card green">
+    <div class="finding-num">Finding 01</div>
+    <div class="finding-title">Viveka Gain Provides Consistent Improvement</div>
+    <div class="finding-body">Viveka-gated selective synaptic protection adds a consistent +0.63pp AA over Maya-Smriti on the harder Split-CIFAR-100 benchmark. The gain is modest but mechanistically clean — cross-task consistency scores discriminate stable from unstable synapses, extending V-fc1 protection by ~2–4pp per task.</div>
+    <span class="finding-stat">E vs C: +0.63pp AA | V-fc1 peaks at 56% vs 51%</span>
+  </div>
+  <div class="finding-card">
+    <div class="finding-num">Finding 02</div>
+    <div class="finding-title">Orthogonal Head Causes Vairagya Collapse</div>
+    <div class="finding-body">Adding an orthogonal prototype head suppresses Vairagya saturation from ~0.47 to ~0.24 — a 49% reduction. The prototype geometry actively fights the affective consolidation signal: as orthogonal constraints rigidify the output space, Vairagya cannot protect synapses freely. AA collapses from 15.40% back to 6.56% — near baseline.</div>
+    <span class="finding-stat">D vs C: −8.84pp AA | Vairagya: 0.47→0.24</span>
+  </div>
+  <div class="finding-card blue">
+    <div class="finding-num">Finding 03</div>
+    <div class="finding-title">Bhaya Quiescence Replicates on Harder Benchmark</div>
+    <div class="finding-body">First confirmed in P4 on Split-CIFAR-10, Bhaya quiescence now replicates on Split-CIFAR-100 — a 10× harder class space. Every replay condition shows Bhaya firing only during Task 0 (rate=0.024), then exactly 0.000 for Tasks 1–9. Baseline continues escalating. This is a robust emergent property of replay-stabilised affective SNNs.</div>
+    <span class="finding-stat">Bhaya: 0.024 (T0) → 0.000 (T1–T9) across all replay conditions</span>
+  </div>
+  <div class="finding-card purple">
+    <div class="finding-num">Finding 04</div>
+    <div class="finding-title">Buddhi S-Curve is Architecturally Deterministic</div>
+    <div class="finding-body">The Buddhi consolidation gate follows an identical S-curve across all 6 ablation conditions: 0.10, 0.30, 0.50, 0.70, 0.90 at epochs 0–4, locking at 1.0 from epoch 5 onwards. Head type and Viveka presence have zero effect on Buddhi dynamics. This confirms Buddhi is a stable architectural prior, not an adaptive signal.</div>
+    <span class="finding-stat">Buddhi curve: identical across A, B, C, D, E, F</span>
+  </div>
+  <div class="finding-card gold">
+    <div class="finding-num">Finding 05</div>
+    <div class="finding-title">Replay Budget Remains Primary Bottleneck</div>
+    <div class="finding-body">Moving from 20 to 50 exemplars/class yields +4.10pp AA and +4.96pp BWT — larger than any architectural addition in the ablation. Viveka and Vairagya provide genuine signal above this floor, but the replay budget sets the ceiling. This motivates P6: a retrograde consolidation mechanism that modulates what was consolidated rather than requiring more exemplars.</div>
+    <span class="finding-stat">20→50/class: +4.10pp AA | Viveka: +0.63pp additional</span>
+  </div>
+  <div class="finding-card">
+    <div class="finding-num">Finding 06 · P6 Motivation</div>
+    <div class="finding-title">Orthogonal Collapse Reveals Missing Retrograde Signal</div>
+    <div class="finding-body">The orthogonal head failure is not random noise — it reveals a specific architectural gap. The network consolidates synapses forward during learning (Vairagya protection), but has no mechanism to revise that decision after a task boundary when prototype geometry shifts. This is exactly the endocannabinoid retrograde signalling problem. P6 addresses it directly.</div>
+    <span class="finding-stat">P6: retrograde consolidation correction via eCB-inspired signal</span>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════ VEDANTIC ARCHITECTURE ═══════════════════════════════ -->
+<div class="section-title">Vedantic Architecture — Antahkarana Mapping</div>
+<div class="chart-card">
+  <div class="chart-sub" style="margin-bottom:1rem;">Each affective dimension corresponds to a faculty of the Antahkarana (inner instrument) in Advaita Vedanta. The series maps the complete cognitive architecture onto independently falsifiable SNN components.</div>
+  <table class="vedantic-table">
+    <thead>
+      <tr>
+        <th>Dimension</th>
+        <th>Sanskrit</th>
+        <th>Computational Role</th>
+        <th>τ / Mechanism</th>
+        <th>Status</th>
+        <th>Paper</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr class="active">
+        <td>Bhaya</td><td><span class="sanskrit">भय</span></td>
+        <td>Fear · nociceptive pain trigger · gradient signal</td>
+        <td>τ = 3</td>
+        <td><span class="status-badge sb-active">Active P1–P5</span></td>
+        <td>P1</td>
+      </tr>
+      <tr class="active">
+        <td>Vairagya</td><td><span class="sanskrit">वैराग्य</span></td>
+        <td>Wisdom · heterosynaptic decay gating · selective consolidation</td>
+        <td>τ = 20</td>
+        <td><span class="status-badge sb-active">Active P1–P5</span></td>
+        <td>P1</td>
+      </tr>
+      <tr class="active">
+        <td>Shraddha</td><td><span class="sanskrit">श्रद्धा</span></td>
+        <td>Trust · confidence integrator</td>
+        <td>τ = 10</td>
+        <td><span class="status-badge sb-active">Active P1–P5</span></td>
+        <td>P1</td>
+      </tr>
+      <tr class="active">
+        <td>Spanda</td><td><span class="sanskrit">स्पन्द</span></td>
+        <td>Aliveness · spike rate monitor</td>
+        <td>τ = 5</td>
+        <td><span class="status-badge sb-active">Active P1–P5</span></td>
+        <td>P1</td>
+      </tr>
+      <tr class="active">
+        <td>Buddhi</td><td><span class="sanskrit">बुद्धि</span></td>
+        <td>Intellect · S-curve consolidation gate · Viparita Buddhi at task boundaries</td>
+        <td>τ = 200</td>
+        <td><span class="status-badge sb-active">Active P4–P5</span></td>
+        <td>P4</td>
+      </tr>
+      <tr class="new-p5">
+        <td><strong>Viveka ★</strong></td><td><span class="sanskrit">विवेक</span></td>
+        <td>Discernment · cross-task synaptic consistency · Vairagya gain modulation</td>
+        <td>Learned score</td>
+        <td><span class="status-badge sb-new">New · P5</span></td>
+        <td><strong>P5</strong></td>
+      </tr>
+      <tr>
+        <td>Ahamkara</td><td><span class="sanskrit">अहंकार</span></td>
+        <td>Ego · task-attachment as forgetting cause · fc_out lock-out</td>
+        <td>Failure mode</td>
+        <td><span class="status-badge sb-named">Named P4 · Dissolved P5</span></td>
+        <td>P4→P5</td>
+      </tr>
+      <tr class="planned">
+        <td>Samskara</td><td><span class="sanskrit">संस्कार</span></td>
+        <td>Impression traces · cross-task synaptic memory</td>
+        <td>TBD</td>
+        <td><span class="status-badge sb-planned">Planned P6</span></td>
+        <td>P6</td>
+      </tr>
+      <tr class="planned">
+        <td>Chitta</td><td><span class="sanskrit">चित्त</span></td>
+        <td>Implicit synaptic memory · retrograde eCB signal</td>
+        <td>TBD</td>
+        <td><span class="status-badge sb-planned">Planned P6</span></td>
+        <td>P6</td>
+      </tr>
+      <tr class="planned">
+        <td>Prana</td><td><span class="sanskrit">प्राण</span></td>
+        <td>Metabolic plasticity budget · embodied energy constraint</td>
+        <td>TBD</td>
+        <td><span class="status-badge sb-planned">Planned P9</span></td>
+        <td>P9</td>
+      </tr>
+    </tbody>
+  </table>
+  <div style="margin-top:1rem;padding:0.8rem;background:#f8f9fb;border-radius:6px;font-size:0.72rem;color:var(--muted);line-height:1.6;">
+    <strong style="color:var(--ink2);">Series thesis:</strong> The Antahkarana (inner cognitive instrument) in Advaita Vedanta maps precisely onto a neuromorphic CIL architecture. Each paper introduces exactly one new Vedantic dimension, enabling clean ablation and isolated contribution claims. The complete system — Manas (P1), Buddhi (P4), Viveka (P5), Chitta (P6), Prana (P9) — constitutes the Antahkarana in SNN form.
+  </div>
+</div>
+
+<!-- ═══════════════════════════════ MAYA RESEARCH SERIES ═══════════════════════════════ -->
+<div class="section-title">Maya Research Series</div>
+<div class="chart-card">
+  <div class="bar-chart">
+    <div class="bar-row">
+      <div class="bar-label">P1 · Nociceptive</div>
+      <div class="bar-track" style="background:#f8fafc;border:1px solid var(--border);">
+        <div style="padding:0 0.8rem;display:flex;align-items:center;height:100%;font-size:0.68rem;font-family:'DM Mono',monospace;color:var(--muted);">
+          Metaplasticity &amp; Graceful Decay · Split-CIFAR-10 TIL · <a href="https://doi.org/10.5281/zenodo.19151563" style="color:var(--viveka);">zenodo.19151563</a>
+        </div>
+      </div>
+    </div>
+    <div class="bar-row">
+      <div class="bar-label">P2 · Maya-OS</div>
+      <div class="bar-track" style="background:#f8fafc;border:1px solid var(--border);">
+        <div style="padding:0 0.8rem;display:flex;align-items:center;height:100%;font-size:0.68rem;font-family:'DM Mono',monospace;color:var(--muted);">
+          Affective SNN as OS Arbitration Layer · <a href="https://doi.org/10.5281/zenodo.19160123" style="color:var(--viveka);">zenodo.19160123</a>
+        </div>
+      </div>
+    </div>
+    <div class="bar-row">
+      <div class="bar-label">P3 · Maya-CL</div>
+      <div class="bar-track" style="background:#f8fafc;border:1px solid var(--border);">
+        <div style="padding:0 0.8rem;display:flex;align-items:center;height:100%;font-size:0.68rem;font-family:'DM Mono',monospace;color:var(--muted);">
+          Vairagya-Governed CL · AA=62.38% TIL · <a href="https://doi.org/10.5281/zenodo.19201769" style="color:var(--viveka);">zenodo.19201769</a>
+        </div>
+      </div>
+    </div>
+    <div class="bar-row">
+      <div class="bar-label">P4 · Maya-Smriti</div>
+      <div class="bar-track" style="background:#f8fafc;border:1px solid var(--border);">
+        <div style="padding:0 0.8rem;display:flex;align-items:center;height:100%;font-size:0.68rem;font-family:'DM Mono',monospace;color:var(--muted);">
+          Episodic Memory CIL · AA=31.84% CIFAR-10 · Buddhi · <a href="https://doi.org/10.5281/zenodo.19228975" style="color:var(--viveka);">zenodo.19228975</a>
+        </div>
+      </div>
+    </div>
+    <div class="bar-row">
+      <div class="bar-label"><strong>P5 · Maya-Viveka ★</strong></div>
+      <div class="bar-track" style="background:#e0f2fe;border:1px solid var(--viveka);">
+        <div style="padding:0 0.8rem;display:flex;align-items:center;height:100%;font-size:0.68rem;font-family:'DM Mono',monospace;color:var(--viveka);font-weight:600;">
+          Viveka-Gated CIL · AA=16.03% CIFAR-100 · This paper · DOI pending
+        </div>
+      </div>
+    </div>
+    <div class="bar-row">
+      <div class="bar-label" style="color:#cbd5e1;">P6 · eCB Retrograde</div>
+      <div class="bar-track" style="background:#f8fafc;border:1px dashed var(--border);">
+        <div style="padding:0 0.8rem;display:flex;align-items:center;height:100%;font-size:0.68rem;font-family:'DM Mono',monospace;color:#cbd5e1;">
+          Endocannabinoid Retrograde Signalling SNN · Chitta · Samskara · Planned
+        </div>
+      </div>
+    </div>
+    <div class="bar-row">
+      <div class="bar-label" style="color:#cbd5e1;">P9 · Embodied</div>
+      <div class="bar-track" style="background:#f8fafc;border:1px dashed var(--border);">
+        <div style="padding:0 0.8rem;display:flex;align-items:center;height:100%;font-size:0.68rem;font-family:'DM Mono',monospace;color:#cbd5e1;">
+          Full Antahkarana · PiCar-X · Prana · AA_MAYA · Flagship P9
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+</main>
+
+<div class="footer">
+  Maya-Viveka · Paper 5 · Venkatesh Swaminathan · Nexus Learning Labs · BITS Pilani · 2026<br>
+  GitHub: <a href="https://github.com/venky2099/Maya-Viveka" style="color:var(--viveka);">venky2099/Maya-Viveka</a> · All experiments: NVIDIA RTX 4060 8GB · Seed 42
+</div>
+
+<script>
+// ═══════════════════════════════ DATA ═══════════════════════════════
+const DATA = {
+  viveka_traj: [0.5802,0.5531,0.5778,0.5292,0.5519,0.5636,0.5642,0.5109,0.5065,0.534],
+  buddhi_curve: [0.1025,0.3025,0.5025,0.7025,0.9025,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0],
+  bhaya: {
+    baseline:     [0.0354,0.0646,0.0637,0.0737,0.0704,0.07,0.0833,0.0907,0.1222,0.085],
+    replay_only:  [0.0225,0,0,0,0,0,0,0,0,0],
+    maya_smriti:  [0.0238,0,0,0,0,0,0,0,0,0],
+    viveka:       [0.0238,0,0,0,0,0,0,0,0,0],
+  },
+  vairagya: {
+    replay_only:      [0.6102,0.5899,0.6129,0.5705,0.5945,0.6018,0.6172,0.5651,0.5684,0.5997],
+    maya_smriti:      [0.5802,0.5531,0.5777,0.5313,0.5505,0.5613,0.5636,0.5102,0.501,0.5302],
+    maya_smriti_ortho:[0.3118,0.2494,0.269,0.2578,0.2792,0.291,0.303,0.282,0.2815,0.3173],
+    viveka_no_ortho:  [0.5802,0.5531,0.5778,0.5292,0.5519,0.5636,0.5642,0.5109,0.5065,0.534],
+  },
+  vfc1: {
+    maya_smriti:      [0.2197,0.4046,0.5118,0.5161,0.5045,0.4727,0.3927,0.355,0.3088,0.2662],
+    maya_smriti_ortho:[0.2786,0.4195,0.4463,0.4787,0.4832,0.429,0.3797,0.3928,0.4037,0.3862],
+    viveka_no_ortho:  [0.2197,0.4046,0.5337,0.5596,0.5458,0.5232,0.442,0.4013,0.3848,0.3392],
+  },
+  within_task_conf: [0.575,0.562,0.575,0.531,0.551,0.564,0.565,0.518,0.506,0.536],
+  acc_matrices: {
+    baseline: [
+      [53.1,0,0,0,0,0,0,0,0,0],
+      [0,58.2,0,0,0,0,0,0,0,0],
+      [0,0,66.8,0,0,0,0,0,0,0],
+      [0,0,0,61.5,0,0,0,0,0,0],
+      [0,0,0,0,64.0,0,0,0,0,0],
+      [0,0,0,0,0,65.5,0,0,0,0],
+      [0,0,0,0,0,0,64.3,0,0,0],
+      [0,0,0,0,0,0,0,62.3,0,0],
+      [0,0,0,0,0,0,0,0,62.4,0],
+      [0,0,0,0,0,0,0,0,0,68.2],
+    ],
+    viveka: [
+      [60.4,0,0,0,0,0,0,0,0,0],
+      [12.6,53.4,0,0,0,0,0,0,0,0],
+      [14.1,20.8,61.5,0,0,0,0,0,0,0],
+      [16.2,10.4,24.3,59.9,0,0,0,0,0,0],
+      [13.4,9.2,18.3,14.1,62.8,0,0,0,0,0],
+      [9.7,10.2,21.7,11.9,17.6,60.0,0,0,0,0],
+      [9.8,8.3,14.5,9.0,15.2,21.2,66.3,0,0,0],
+      [9.4,6.7,11.4,8.8,13.4,22.1,8.5,59.1,0,0],
+      [7.1,4.4,15.5,12.7,12.9,15.3,14.8,13.1,64.3,0],
+      [14.2,6.2,11.0,5.5,12.3,10.2,15.9,9.8,8.1,67.1],
+    ],
+    replay: [
+      [58.0,0,0,0,0,0,0,0,0,0],
+      [13.8,55.8,0,0,0,0,0,0,0,0],
+      [13.6,20.6,64.8,0,0,0,0,0,0,0],
+      [15.0,8.8,24.3,61.6,0,0,0,0,0,0],
+      [11.5,6.3,13.2,12.2,63.1,0,0,0,0,0],
+      [9.2,7.3,19.1,8.5,16.2,64.9,0,0,0,0],
+      [6.5,5.2,12.5,10.4,15.2,24.2,66.8,0,0,0],
+      [6.1,5.1,11.4,6.9,12.6,19.0,11.7,63.0,0,0],
+      [6.5,3.3,9.0,8.4,12.8,18.4,18.4,19.8,67.1,0],
+      [8.5,2.5,11.8,3.4,11.5,9.2,15.0,11.0,9.6,70.7],
+    ],
+  }
+};
+
+// ═══════════════════════════════ MATRIX RENDERER ═══════════════════════════════
+function renderMatrix(containerId, matrix) {
+  const n = matrix.length;
+  let html = '<table class="matrix-table"><thead><tr><th>After T→</th>';
+  for (let j = 0; j < n; j++) html += `<th>T${j}</th>`;
+  html += '</tr></thead><tbody>';
+  for (let i = 0; i < n; i++) {
+    html += `<tr><th style="background:var(--ink2);color:white;font-size:0.65rem;">T${i}</th>`;
+    for (let j = 0; j < n; j++) {
+      const v = matrix[i][j];
+      if (j > i) {
+        html += `<td class="zero">—</td>`;
+      } else if (i === j) {
+        html += `<td class="diag">${v.toFixed(1)}</td>`;
+      } else if (v === 0) {
+        html += `<td class="zero">0.0</td>`;
+      } else {
+        html += `<td class="nonzero">${v.toFixed(1)}</td>`;
+      }
+    }
+    html += '</tr>';
+  }
+  html += '</tbody></table>';
+  document.getElementById(containerId).innerHTML = html;
+}
+
+renderMatrix('matrix-viveka-container', DATA.acc_matrices.viveka);
+renderMatrix('matrix-replay-container', DATA.acc_matrices.replay);
+renderMatrix('matrix-baseline-container', DATA.acc_matrices.baseline);
+
+// ═══════════════════════════════ TAB SWITCHER ═══════════════════════════════
+function switchMatrix(name) {
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  event.target.classList.add('active');
+  document.getElementById('mat-' + name).classList.add('active');
+}
+
+// ═══════════════════════════════ CANVAS UTILITIES ═══════════════════════════════
+function setupCanvas(id) {
+  const canvas = document.getElementById(id);
+  const dpr = window.devicePixelRatio || 1;
+  const rect = canvas.getBoundingClientRect();
+  canvas.width = rect.width * dpr || canvas.parentElement.clientWidth * dpr;
+  canvas.height = parseInt(canvas.getAttribute('height')) * dpr;
+  const ctx = canvas.getContext('2d');
+  ctx.scale(dpr, dpr);
+  canvas.style.width = (canvas.width / dpr) + 'px';
+  canvas.style.height = parseInt(canvas.getAttribute('height')) + 'px';
+  return { ctx, w: canvas.width / dpr, h: parseInt(canvas.getAttribute('height')) };
+}
+
+function drawLineChart(ctx, w, h, datasets, labels, yMin, yMax, pad) {
+  pad = pad || { top:20, right:20, bottom:30, left:45 };
+  const cw = w - pad.left - pad.right;
+  const ch = h - pad.top - pad.bottom;
+  const n = labels.length;
+  ctx.clearRect(0, 0, w, h);
+
+  // grid
+  ctx.strokeStyle = '#e2e8f0'; ctx.lineWidth = 1;
+  const ySteps = 5;
+  for (let i = 0; i <= ySteps; i++) {
+    const y = pad.top + ch - (i / ySteps) * ch;
+    ctx.beginPath(); ctx.moveTo(pad.left, y); ctx.lineTo(pad.left + cw, y); ctx.stroke();
+    const val = yMin + (i / ySteps) * (yMax - yMin);
+    ctx.fillStyle = '#94a3b8'; ctx.font = '9px DM Mono,monospace'; ctx.textAlign = 'right';
+    ctx.fillText(val.toFixed(2), pad.left - 5, y + 3);
+  }
+
+  // x labels
+  ctx.fillStyle = '#94a3b8'; ctx.font = '9px DM Mono,monospace'; ctx.textAlign = 'center';
+  for (let i = 0; i < n; i++) {
+    const x = pad.left + (i / (n - 1)) * cw;
+    ctx.fillText(labels[i], x, h - pad.bottom + 14);
+  }
+
+  // lines
+  datasets.forEach(ds => {
+    ctx.strokeStyle = ds.color; ctx.lineWidth = ds.width || 2;
+    ctx.setLineDash(ds.dash || []);
+    ctx.beginPath();
+    ds.data.forEach((v, i) => {
+      const x = pad.left + (i / (n - 1)) * cw;
+      const y = pad.top + ch - ((v - yMin) / (yMax - yMin)) * ch;
+      i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+    });
+    ctx.stroke();
+    ctx.setLineDash([]);
+
+    // dots
+    ds.data.forEach((v, i) => {
+      const x = pad.left + (i / (n - 1)) * cw;
+      const y = pad.top + ch - ((v - yMin) / (yMax - yMin)) * ch;
+      ctx.beginPath(); ctx.arc(x, y, 3, 0, Math.PI * 2);
+      ctx.fillStyle = ds.color; ctx.fill();
+    });
+  });
+
+  // legend
+  let lx = pad.left;
+  datasets.forEach(ds => {
+    ctx.strokeStyle = ds.color; ctx.lineWidth = 2; ctx.setLineDash(ds.dash || []);
+    ctx.beginPath(); ctx.moveTo(lx, pad.top - 8); ctx.lineTo(lx + 18, pad.top - 8); ctx.stroke();
+    ctx.setLineDash([]);
+    ctx.fillStyle = '#374151'; ctx.font = '9px DM Sans,sans-serif'; ctx.textAlign = 'left';
+    ctx.fillText(ds.label, lx + 22, pad.top - 4);
+    lx += ctx.measureText(ds.label).width + 36;
+  });
+}
+
+const taskLabels = ['T0','T1','T2','T3','T4','T5','T6','T7','T8','T9'];
+const epochLabels = Array.from({length:20}, (_,i) => i);
+
+// Within-task confidence
+setTimeout(() => {
+  const {ctx, w, h} = setupCanvas('withinTaskCanvas');
+  drawLineChart(ctx, w, h, [
+    { data: DATA.within_task_conf, color: '#0e7490', label: 'Run 2 (50/class)', width: 2 }
+  ], taskLabels, 0.45, 0.70);
+}, 100);
+
+// Bhaya quiescence
+setTimeout(() => {
+  const {ctx, w, h} = setupCanvas('bhayaCanvas');
+  drawLineChart(ctx, w, h, [
+    { data: DATA.bhaya.baseline, color: '#c0392b', label: 'Baseline (no replay)', width: 2 },
+    { data: DATA.bhaya.replay_only, color: '#94a3b8', label: 'Replay only', width: 1.5, dash: [4,3] },
+    { data: DATA.bhaya.maya_smriti, color: '#2e7d52', label: 'Maya-Smriti', width: 1.5, dash: [6,3] },
+    { data: DATA.bhaya.viveka, color: '#0e7490', label: 'Viveka (E)', width: 2 },
+  ], taskLabels, 0, 0.14);
+}, 100);
+
+// Buddhi S-curve
+setTimeout(() => {
+  const {ctx, w, h} = setupCanvas('buddhiCanvas');
+  drawLineChart(ctx, w, h, [
+    { data: DATA.buddhi_curve, color: '#7c3aed', label: 'Buddhi (identical across all conditions)', width: 2.5 }
+  ], epochLabels, 0, 1.05, {top:20, right:20, bottom:30, left:40});
+}, 100);
+
+// Vairagya saturation
+setTimeout(() => {
+  const {ctx, w, h} = setupCanvas('vairagyaCanvas');
+  drawLineChart(ctx, w, h, [
+    { data: DATA.vairagya.replay_only, color: '#94a3b8', label: 'Replay only', width: 1.5, dash: [4,3] },
+    { data: DATA.vairagya.maya_smriti, color: '#2e7d52', label: 'Maya-Smriti', width: 2 },
+    { data: DATA.vairagya.viveka_no_ortho, color: '#0e7490', label: 'Viveka (E)', width: 2.5 },
+    { data: DATA.vairagya.maya_smriti_ortho, color: '#c0392b', label: 'Smriti+Ortho (D) ⚠', width: 2, dash: [5,3] },
+  ], taskLabels, 0.10, 0.70);
+}, 100);
+
+// V-fc1 protection
+setTimeout(() => {
+  const {ctx, w, h} = setupCanvas('vfc1Canvas');
+  drawLineChart(ctx, w, h, [
+    { data: DATA.vfc1.maya_smriti, color: '#2e7d52', label: 'Maya-Smriti', width: 2, dash: [4,3] },
+    { data: DATA.vfc1.viveka_no_ortho, color: '#0e7490', label: 'Viveka (E)', width: 2.5 },
+    { data: DATA.vfc1.maya_smriti_ortho, color: '#c0392b', label: 'Smriti+Ortho (D)', width: 1.5, dash: [5,3] },
+  ], taskLabels, 0.10, 0.65);
+}, 100);
+
+// Viveka trajectory
+setTimeout(() => {
+  const {ctx, w, h} = setupCanvas('vivekaCanvas');
+  drawLineChart(ctx, w, h, [
+    { data: DATA.viveka_traj, color: '#0e7490', label: 'Viveka cross-task consistency score (Run 2, 50/class)', width: 2.5 }
+  ], taskLabels, 0.40, 0.65, {top:20, right:20, bottom:30, left:45});
+}, 100);
+
+// ═══════════════════════════════ BHAYA QUIESCENCE HEATMAP ═══════════════════════════════
+(function buildHeatmap() {
+  const grid = document.getElementById('bhayaGrid');
+  const conditions = [
+    { label: 'A · Baseline', data: DATA.bhaya.baseline },
+    { label: 'B · Replay', data: DATA.bhaya.replay_only },
+    { label: 'C · Smriti', data: DATA.bhaya.maya_smriti },
+    { label: 'E · Viveka', data: DATA.bhaya.viveka },
+  ];
+
+  // headers
+  grid.innerHTML += '<div class="qg-header" style="color:var(--muted);font-size:0.62rem;"></div>';
+  for (let t = 0; t < 10; t++) {
+    grid.innerHTML += `<div class="qg-header">T${t}</div>`;
+  }
+
+  conditions.forEach(c => {
+    const labelDiv = document.createElement('div');
+    labelDiv.className = 'qg-label';
+    labelDiv.style.fontSize = '0.62rem';
+    labelDiv.style.fontFamily = "'DM Mono',monospace";
+    labelDiv.textContent = c.label;
+    grid.appendChild(labelDiv);
+
+    c.data.forEach(v => {
+      const cell = document.createElement('div');
+      cell.className = 'qg-cell';
+      if (v === 0) {
+        cell.style.background = '#dcfce7';
+        cell.style.color = '#15803d';
+        cell.textContent = '0.000';
+      } else if (v < 0.05) {
+        cell.style.background = '#fef9c3';
+        cell.style.color = '#854d0e';
+        cell.textContent = v.toFixed(3);
+      } else if (v < 0.1) {
+        cell.style.background = '#fed7aa';
+        cell.style.color = '#9a3412';
+        cell.textContent = v.toFixed(3);
+      } else {
+        cell.style.background = '#fecaca';
+        cell.style.color = '#991b1b';
+        cell.textContent = v.toFixed(3);
+      }
+      grid.appendChild(cell);
+    });
+  });
+})();
+</script>
+</body>
+</html>
