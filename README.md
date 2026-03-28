@@ -149,7 +149,7 @@ python -m experiments.run_ablation_viveka
   author    = {Swaminathan, Venkatesh},
   year      = {2026},
   publisher = {Zenodo},
-  note      = {Preprint. DOI to be assigned.}
+  note      = {https://doi.org/10.5281/zenodo.19279002}
 }
 ```
 
@@ -159,11 +159,11 @@ python -m experiments.run_ablation_viveka
 
 | Paper | Title | Repo | DOI |
 |-------|-------|------|-----|
-| P1 | Nociceptive Metaplasticity and Graceful Decay in SNNs | [Maya-Nexus-Core](https://github.com/venky2099/Maya-Nexus-Core) | [10.5281/zenodo.19151563](https://doi.org/10.5281/zenodo.19151563) |
-| P2 | Maya-OS: Affective SNN as Conversational OS Arbitration Layer | [Maya-OS](https://github.com/venky2099/Maya-OS) | [10.5281/zenodo.19160123](https://doi.org/10.5281/zenodo.19160123) |
-| P3 | Maya-CL: Nociceptive Metaplasticity for Continual Learning | [Maya-CL](https://github.com/venky2099/Maya-CL) | [10.5281/zenodo.19201769](https://doi.org/10.5281/zenodo.19201769) |
-| P4 | Maya-Smriti: Episodic Memory for CIL | [Maya-Smriti](https://github.com/venky2099/Maya-Smriti) | [10.5281/zenodo.19228975](https://doi.org/10.5281/zenodo.19228975) |
-| **P5** | **Maya-Viveka: Viveka-Gated Synaptic Discrimination** | **This repo** | [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.19279002.svg)](https://doi.org/10.5281/zenodo.19279002) |
+| P1 | Nociceptive Metaplasticity and Graceful Decay in SNNs | [Maya-Nexus-Core](https://github.com/venky2099/Maya-Nexus-Core) | [10.5281/zenodo.19151563](https://.org/10.5281/zenodo.19151563) |
+| P2 | Maya-OS: Affective SNN as Conversational OS Arbitration Layer | [Maya-OS](https://github.com/venky2099/Maya-OS) | [10.5281/zenodo.19160123](https://.org/10.5281/zenodo.19160123) |
+| P3 | Maya-CL: Nociceptive Metaplasticity for Continual Learning | [Maya-CL](https://github.com/venky2099/Maya-CL) | [10.5281/zenodo.19201769](https://.org/10.5281/zenodo.19201769) |
+| P4 | Maya-Smriti: Episodic Memory for CIL | [Maya-Smriti](https://github.com/venky2099/Maya-Smriti) | [10.5281/zenodo.19228975](https://.org/10.5281/zenodo.19228975) |
+| **P5** | **Maya-Viveka: Viveka-Gated Synaptic Discrimination** | **This repo** | [![](https://zenodo.org/badge//10.5281/zenodo.19279002.svg)](https://.org/10.5281/zenodo.19279002) |
 
 ---
 
