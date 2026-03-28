@@ -1,4 +1,5 @@
-# task_sequence.py — task state tracking and pain signal computation
+﻿# task_sequence.py — task transition management for Maya-Viveka
+# Updated for 10-task Split-CIFAR-100 CIL.
 
 import torch
 from maya_cl.utils.config import NUM_TASKS, PAIN_CONFIDENCE_THRESHOLD
@@ -7,38 +8,41 @@ from maya_cl.utils.config import NUM_TASKS, PAIN_CONFIDENCE_THRESHOLD
 class TaskSequencer:
 
     def __init__(self):
-        self.current_task = 0
-        self.confidence_history = []
-        self.pain_fired = False
+        self.current_task       = 0
+        self.tasks_seen         = 0
+        self._prev_loss         = None
+        self._confidence_window = []
+        self._window_size       = 10
 
     def update_confidence(self, logits: torch.Tensor) -> float:
-        probs = torch.softmax(logits.detach(), dim=1)
-        mean_conf = probs.max(dim=1).values.mean().item()
-        self.confidence_history.append(mean_conf)
-        if len(self.confidence_history) > 20:
-            self.confidence_history.pop(0)
-        return mean_conf
+        with torch.no_grad():
+            probs = torch.softmax(logits.detach(), dim=1)
+            conf  = probs.max(dim=1).values.mean().item()
+            self._confidence_window.append(conf)
+            if len(self._confidence_window) > self._window_size:
+                self._confidence_window.pop(0)
+        return conf
 
-    def check_pain_signal(self, cur_loss: float, prev_loss: float,
-                          current_conf: float,
+    def check_pain_signal(self,
+                          cur_loss:    float,
+                          prev_loss:   float,
+                          confidence:  float,
                           replay_conf: float = None) -> bool:
-        # Condition 1 — loss spike (works in Paper 3, less reliable with replay)
-        if prev_loss is not None:
-            if (cur_loss / (prev_loss + 1e-8)) > 1.5:
-                self.pain_fired = True
-                return True
+        if prev_loss is None:
+            return False
 
-        # Condition 2 — replay confidence collapse
-        # When old class samples produce low confidence, the network
-        # is failing to retain prior knowledge. This is the CIL pain signal.
-        if replay_conf is not None and replay_conf < 0.30:
-            self.pain_fired = True
-            return True
+        loss_spike = (cur_loss / (prev_loss + 1e-8)) > 1.3
 
-        self.pain_fired = False
-        return False
+        conf_below_threshold = confidence < PAIN_CONFIDENCE_THRESHOLD
+        if replay_conf is not None:
+            conf_below_threshold = (
+                conf_below_threshold and replay_conf < PAIN_CONFIDENCE_THRESHOLD
+            )
 
-    def next_task(self):
-        assert self.current_task < NUM_TASKS - 1
-        self.current_task += 1
-        self.confidence_history.clear()
+        return loss_spike or conf_below_threshold
+
+    def on_task_boundary(self, task_id: int) -> None:
+        self.current_task = task_id
+        self.tasks_seen   = task_id
+        self._prev_loss   = None
+        self._confidence_window.clear()

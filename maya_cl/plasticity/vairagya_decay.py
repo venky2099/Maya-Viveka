@@ -1,11 +1,5 @@
-# vairagya_decay.py — affectively-gated heterosynaptic decay
-# V[i][j] per-synapse Vairagya score. High score = protected from decay.
-#
-# Paper 4 addition: Viparita Buddhi erosion.
-# When Buddhi is low (fear high, experience low), Vairagya scores erode.
-# Erosion gates to zero as Buddhi rises — wisdom stabilises with experience.
-# This prevents the score from becoming a one-way ratchet, which caused
-# fc_out to hit 100% protection and block CIL gradient flow entirely.
+﻿# vairagya_decay.py — affectively-gated heterosynaptic decay
+# Paper 5: Viveka gain multiplier on accumulation.
 
 import torch
 from maya_cl.utils.config import (
@@ -22,16 +16,24 @@ class VairagyadDecay:
         self.scores = torch.zeros(shape, device=device)
         self.device = device
 
-    def accumulate(self, active_mask: torch.Tensor,
+    def accumulate(self,
+                   active_mask: torch.Tensor,
                    pain_mask: torch.Tensor,
                    bhaya: float = 0.0,
-                   buddhi: float = 1.0) -> None:
+                   buddhi: float = 1.0,
+                   viveka_gain: torch.Tensor = None) -> None:
         with torch.no_grad():
-            self.scores[active_mask] += VAIRAGYA_ACCUMULATE_RATE * buddhi
-            self.scores[pain_mask] += VAIRAGYA_ACCUMULATE_RATE * 5.0 * buddhi
+            base_rate = VAIRAGYA_ACCUMULATE_RATE * buddhi
 
-            # Viparita Buddhi erosion — only meaningful when Buddhi is collapsed.
-            # viparita_multiplier approaches 0 as Buddhi → 1.
+            if viveka_gain is not None:
+                effective_rate = base_rate * viveka_gain
+                self.scores[active_mask] += effective_rate[active_mask]
+            else:
+                self.scores[active_mask] += base_rate
+
+            pain_bonus = VAIRAGYA_ACCUMULATE_RATE * 5.0 * buddhi
+            self.scores[pain_mask] += pain_bonus
+
             viparita = bhaya * (1.0 - buddhi)
             if viparita > 0.01:
                 self.scores -= viparita * VAIRAGYA_PAIN_EROSION_RATE

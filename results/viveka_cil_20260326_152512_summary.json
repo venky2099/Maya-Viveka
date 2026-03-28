@@ -1,0 +1,210 @@
+{
+  "run_id": "viveka_cil_20260326_152512",
+  "tasks": [
+    {
+      "task": 0,
+      "per_task_accuracy": {
+        "task_0": 57.5,
+        "task_1": 0.0,
+        "task_2": 0.0,
+        "task_3": 0.0,
+        "task_4": 0.0,
+        "task_5": 0.0,
+        "task_6": 0.0,
+        "task_7": 0.0,
+        "task_8": 0.0,
+        "task_9": 0.0
+      },
+      "cl_metrics_so_far": {
+        "AA": 0.0,
+        "BWT": 0.0,
+        "FWT": -1.0
+      }
+    },
+    {
+      "task": 1,
+      "per_task_accuracy": {
+        "task_0": 7.7,
+        "task_1": 56.5,
+        "task_2": 0.0,
+        "task_3": 0.0,
+        "task_4": 0.0,
+        "task_5": 0.0,
+        "task_6": 0.0,
+        "task_7": 0.0,
+        "task_8": 0.0,
+        "task_9": 0.0
+      },
+      "cl_metrics_so_far": {
+        "AA": 0.0,
+        "BWT": 0.0,
+        "FWT": -1.0
+      }
+    },
+    {
+      "task": 2,
+      "per_task_accuracy": {
+        "task_0": 10.3,
+        "task_1": 12.4,
+        "task_2": 62.6,
+        "task_3": 0.0,
+        "task_4": 0.0,
+        "task_5": 0.0,
+        "task_6": 0.0,
+        "task_7": 0.0,
+        "task_8": 0.0,
+        "task_9": 0.0
+      },
+      "cl_metrics_so_far": {
+        "AA": 0.0,
+        "BWT": 0.0,
+        "FWT": -1.0
+      }
+    },
+    {
+      "task": 3,
+      "per_task_accuracy": {
+        "task_0": 5.5,
+        "task_1": 5.6,
+        "task_2": 19.6,
+        "task_3": 59.0,
+        "task_4": 0.0,
+        "task_5": 0.0,
+        "task_6": 0.0,
+        "task_7": 0.0,
+        "task_8": 0.0,
+        "task_9": 0.0
+      },
+      "cl_metrics_so_far": {
+        "AA": 0.0,
+        "BWT": 0.0,
+        "FWT": -1.0
+      }
+    },
+    {
+      "task": 4,
+      "per_task_accuracy": {
+        "task_0": 4.9,
+        "task_1": 2.6,
+        "task_2": 8.4,
+        "task_3": 7.0,
+        "task_4": 62.6,
+        "task_5": 0.0,
+        "task_6": 0.0,
+        "task_7": 0.0,
+        "task_8": 0.0,
+        "task_9": 0.0
+      },
+      "cl_metrics_so_far": {
+        "AA": 0.0,
+        "BWT": 0.0,
+        "FWT": -1.0
+      }
+    },
+    {
+      "task": 5,
+      "per_task_accuracy": {
+        "task_0": 3.0,
+        "task_1": 5.4,
+        "task_2": 11.3,
+        "task_3": 5.3,
+        "task_4": 16.1,
+        "task_5": 61.8,
+        "task_6": 0.0,
+        "task_7": 0.0,
+        "task_8": 0.0,
+        "task_9": 0.0
+      },
+      "cl_metrics_so_far": {
+        "AA": 0.0,
+        "BWT": 0.0,
+        "FWT": -1.0
+      }
+    },
+    {
+      "task": 6,
+      "per_task_accuracy": {
+        "task_0": 3.6,
+        "task_1": 4.1,
+        "task_2": 9.1,
+        "task_3": 3.2,
+        "task_4": 11.5,
+        "task_5": 20.6,
+        "task_6": 66.0,
+        "task_7": 0.0,
+        "task_8": 0.0,
+        "task_9": 0.0
+      },
+      "cl_metrics_so_far": {
+        "AA": 0.0,
+        "BWT": 0.0,
+        "FWT": -1.0
+      }
+    },
+    {
+      "task": 7,
+      "per_task_accuracy": {
+        "task_0": 3.4,
+        "task_1": 3.3,
+        "task_2": 5.4,
+        "task_3": 3.5,
+        "task_4": 10.5,
+        "task_5": 10.9,
+        "task_6": 9.9,
+        "task_7": 60.7,
+        "task_8": 0.0,
+        "task_9": 0.0
+      },
+      "cl_metrics_so_far": {
+        "AA": 0.0,
+        "BWT": 0.0,
+        "FWT": -1.0
+      }
+    },
+    {
+      "task": 8,
+      "per_task_accuracy": {
+        "task_0": 2.4,
+        "task_1": 2.0,
+        "task_2": 7.8,
+        "task_3": 3.7,
+        "task_4": 7.4,
+        "task_5": 9.6,
+        "task_6": 12.3,
+        "task_7": 10.8,
+        "task_8": 63.1,
+        "task_9": 0.0
+      },
+      "cl_metrics_so_far": {
+        "AA": 0.0,
+        "BWT": 0.0,
+        "FWT": -1.0
+      }
+    },
+    {
+      "task": 9,
+      "per_task_accuracy": {
+        "task_0": 4.2,
+        "task_1": 1.5,
+        "task_2": 7.1,
+        "task_3": 1.3,
+        "task_4": 9.1,
+        "task_5": 6.0,
+        "task_6": 9.4,
+        "task_7": 7.8,
+        "task_8": 4.3,
+        "task_9": 68.6
+      },
+      "cl_metrics_so_far": {
+        "AA": 11.93,
+        "BWT": -55.46,
+        "FWT": -1.0
+      }
+    }
+  ],
+  "final_metrics": {
+    "AA": 11.93,
+    "BWT": -55.46,
+    "FWT": -1.0
+  }
+}

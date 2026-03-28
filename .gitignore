@@ -1,30 +1,31 @@
-﻿# Python
+# Python
 __pycache__/
 *.pyc
 *.pyo
 .venv/
 *.egg-info/
 
-# Results — CSVs and JSON logs stay local
-results/*.csv
-results/*.json
-results/*.pt
-
 # PyCharm
 .idea/
 
-# Data — CIFAR-10 downloads
+# Data � CIFAR downloads
 data/
-
-# Experiment artifacts
 experiments/data/
 experiments/results/
 
-# Paper 3 artifacts — not part of this repo
-maya_cl_full_dump.txt
-maya_cl_paper3_report.html
-maya_dashboard.py
-generate_report.py
+# Failed/scratch runs � not canonical
+results/viveka_cil_20260326_122917_batches.csv
+results/viveka_cil_20260326_123144_batches.csv
+results/viveka_cil_20260326_123258_batches.csv
+results/viveka_cil_20260326_123714_batches.csv
+results/viveka_cil_20260326_123714_summary.json
+results/viveka_cil_20260326_140909_batches.csv
+
+# Scratch files
+maya_smriti_dump.txt
+maya_viveka_dump.txt
+maya_viveka_dump2.txt
+maya_smriti_dashboard.html
 
 # Checkpoints
 *.pth

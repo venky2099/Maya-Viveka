@@ -1,5 +1,5 @@
-# metrics.py — AA, BWT, FWT computation for CIL benchmark reporting
-# These are the exact metrics used by TACOS and NACA — ensures fair comparison
+﻿# metrics.py â€” AA, BWT, FWT computation for CIL benchmark reporting
+# These are the exact metrics used by TACOS and NACA â€” ensures fair comparison
 
 import torch
 import numpy as np
@@ -9,9 +9,9 @@ class CLMetrics:
     """
     Tracks accuracy matrix R where R[i][j] = accuracy on task j after training on task i.
     From this matrix computes:
-      AA  — Average Accuracy (mean accuracy across all tasks after final task)
-      BWT — Backward Transfer (mean forgetting of prior tasks)
-      FWT — Forward Transfer (mean zero-shot improvement on future tasks)
+      AA  â€” Average Accuracy (mean accuracy across all tasks after final task)
+      BWT â€” Backward Transfer (mean forgetting of prior tasks)
+      FWT â€” Forward Transfer (mean zero-shot improvement on future tasks)
     """
 
     def __init__(self, num_tasks: int):
@@ -43,9 +43,9 @@ class CLMetrics:
     def forward_transfer(self) -> float:
         """
         FWT = (1 / T-1) * sum_{i=1}^{T-1} [ R[i-1][i] - R_random ]
-        R_random = 0.1 for 10-class CIFAR-10 (random baseline).
+        r_random = 0.01 for 10-class CIFAR-10 (random baseline).
         """
-        r_random = 0.1
+        r_random = 0.01
         fwt_vals = []
         for i in range(1, self.num_tasks):
             if not np.isnan(self.R[i - 1][i]):
@@ -75,8 +75,8 @@ def evaluate_task(model, loader, device: torch.device,
                   encoder, t_steps: int,
                   task_classes: list = None) -> float:
     """
-    TIL mode: task_classes provided — restrict prediction to those 2 classes.
-    CIL mode: task_classes=None — predict across all 10 classes.
+    TIL mode: task_classes provided â€” restrict prediction to those 2 classes.
+    CIL mode: task_classes=None â€” predict across all 10 classes.
     """
     model.eval()
     correct = 0

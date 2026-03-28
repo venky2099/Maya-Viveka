@@ -1,64 +1,100 @@
-# backbone.py — full Maya-CL SNN architecture
-# Conv(32) → MaxPool → Conv(64) → MaxPool → FC(2048) → FC(10)
-# Single unified CIL output head — no task oracle
-# FC1_SIZE=2048 provides sufficient capacity for 5 sequential tasks
-# with ~40-60% Vairagya protection active
+﻿# backbone.py — Maya-Viveka network architecture
+# Conv64 -> Conv128 -> Conv256 -> FC2048 -> OrthogonalPrototypeHead
 
 import torch
 import torch.nn as nn
-from spikingjelly.activation_based import functional, layer, neuron
-from maya_cl.network.lif_layers import ConvLIFBlock, FCLIFBlock
+import torch.nn.functional as F
+from spikingjelly.activation_based import neuron, layer, functional
+
 from maya_cl.utils.config import (
-    CONV1_CHANNELS, CONV2_CHANNELS, FC1_SIZE, NUM_CLASSES, T_STEPS
+    CONV1_CHANNELS, CONV2_CHANNELS, CONV3_CHANNELS,
+    FC1_SIZE, NUM_CLASSES, V_THRESHOLD, V_RESET, TAU_MEMBRANE,
+    PROTOTYPE_DIM
 )
 
 
-class MayaCLNet(nn.Module):
-    """
-    Fixed-size SNN backbone. No architectural expansion across tasks.
-    Plasticity is handled externally by the plasticity modules.
-    FC1_SIZE=2048 ensures sufficient free capacity even with
-    Vairagya protection active on prior-task synapses.
-    """
+class LIFLayer(nn.Module):
+    def __init__(self, in_features: int, out_features: int):
+        super().__init__()
+        self.fc  = nn.Linear(in_features, out_features, bias=False)
+        self.lif = neuron.LIFNode(
+            tau=TAU_MEMBRANE, v_threshold=V_THRESHOLD,
+            v_reset=V_RESET, detach_reset=True
+        )
 
-    def __init__(self):
+    def forward(self, x: torch.Tensor) -> torch.Tensor:
+        return self.lif(self.fc(x))
+
+
+class OrthogonalPrototypeHead(nn.Module):
+    def __init__(self, num_classes: int, dim: int):
+        super().__init__()
+        raw = torch.randn(num_classes, dim)
+        if num_classes <= dim:
+            Q, _ = torch.linalg.qr(raw.T)
+            prototypes = Q.T[:num_classes]
+        else:
+            prototypes = F.normalize(raw, dim=1)
+        self.register_buffer('prototypes', prototypes)
+        self.num_classes = num_classes
+        self.dim         = dim
+
+    def forward(self, x: torch.Tensor) -> torch.Tensor:
+        x_norm = F.normalize(x, dim=1)
+        p_norm = F.normalize(self.prototypes, dim=1)
+        return (x_norm @ p_norm.T) * 10.0
+
+
+class MayaVivekaNet(nn.Module):
+    def __init__(self, use_orthogonal_head: bool = True):
         super().__init__()
 
-        # ── Convolutional blocks ──────────────────────────────────
-        self.conv1 = ConvLIFBlock(3, CONV1_CHANNELS)
-        self.pool1 = layer.MaxPool2d(2, 2)          # 32x32 → 16x16
+        self.conv1 = nn.Sequential(
+            layer.Conv2d(3, CONV1_CHANNELS, kernel_size=3, padding=1, bias=False),
+            layer.BatchNorm2d(CONV1_CHANNELS),
+            neuron.LIFNode(tau=TAU_MEMBRANE, v_threshold=V_THRESHOLD,
+                           v_reset=V_RESET, detach_reset=True)
+        )
+        self.conv2 = nn.Sequential(
+            layer.Conv2d(CONV1_CHANNELS, CONV2_CHANNELS, kernel_size=3, padding=1, bias=False),
+            layer.BatchNorm2d(CONV2_CHANNELS),
+            neuron.LIFNode(tau=TAU_MEMBRANE, v_threshold=V_THRESHOLD,
+                           v_reset=V_RESET, detach_reset=True),
+            layer.MaxPool2d(2, 2)
+        )
+        self.conv3 = nn.Sequential(
+            layer.Conv2d(CONV2_CHANNELS, CONV3_CHANNELS, kernel_size=3, padding=1, bias=False),
+            layer.BatchNorm2d(CONV3_CHANNELS),
+            neuron.LIFNode(tau=TAU_MEMBRANE, v_threshold=V_THRESHOLD,
+                           v_reset=V_RESET, detach_reset=True),
+            layer.MaxPool2d(2, 2)
+        )
 
-        self.conv2 = ConvLIFBlock(CONV1_CHANNELS, CONV2_CHANNELS)
-        self.pool2 = layer.MaxPool2d(2, 2)          # 16x16 → 8x8
-
-        # ── Fully connected blocks ────────────────────────────────
         self.flatten = layer.Flatten()
-        fc1_input = CONV2_CHANNELS * 8 * 8          # 64 * 8 * 8 = 4096
-        self.fc1 = FCLIFBlock(fc1_input, FC1_SIZE)  # 4096 → 2048
 
-        # output layer — standard linear, no LIF
-        self.fc_out = layer.Linear(FC1_SIZE, NUM_CLASSES, bias=True)
+        conv_out_dim = CONV3_CHANNELS * 8 * 8
+        self.fc1 = LIFLayer(conv_out_dim, FC1_SIZE)
 
-        # set step mode to multi-step
+        if use_orthogonal_head:
+            self.fc_out = OrthogonalPrototypeHead(NUM_CLASSES, PROTOTYPE_DIM)
+        else:
+            self.fc_out = nn.Linear(FC1_SIZE, NUM_CLASSES, bias=False)
+
         functional.set_step_mode(self, step_mode='m')
 
-    def forward(self, x_seq: torch.Tensor) -> torch.Tensor:
-        """
-        x_seq: [T, B, C, H, W]
-        returns: [B, NUM_CLASSES]
-        """
-        out = self.conv1(x_seq)
-        out = self.pool1(out)
-        out = self.conv2(out)
-        out = self.pool2(out)
-        out = self.flatten(out)
-        out = self.fc1(out)
-        out = self.fc_out(out)          # [T, B, NUM_CLASSES]
-        out = out.mean(dim=0)           # [B, NUM_CLASSES]
-        return out
+    def forward(self, x: torch.Tensor) -> torch.Tensor:
+        x = self.conv1(x)
+        x = self.conv2(x)
+        x = self.conv3(x)
+        x = self.flatten(x)
+        x = self.fc1(x)
+        x = x.mean(dim=0)
+        return self.fc_out(x)
 
     def reset(self):
-        # reset only LIF nodes — avoids infinite recursion from reset_net
         for m in self.modules():
-            if isinstance(m, neuron.LIFNode):
+            if m is not self and hasattr(m, 'reset'):
                 m.reset()
+
+    def get_fc1_membrane(self) -> torch.Tensor:
+        return self.fc1.lif.v
