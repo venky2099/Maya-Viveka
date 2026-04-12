@@ -1,0 +1,17 @@
+﻿cff-version: 1.2.0
+title: "Maya-Viveka: Cross-Task Consistency via Discriminative Consolidation in Affective SNNs"
+message: "If you use this software, please cite it as below."
+type: software
+authors:
+  - family-names: Swaminathan
+    given-names: Venkatesh
+    orcid: "https://orcid.org/0000-0002-3315-7907"
+    affiliation: "Nexus Learning Labs, Bengaluru"
+repository-code: "https://github.com/venky2099/Maya-Viveka"
+doi: 10.5281/zenodo.19279002
+date-released: "2026-03-25"
+license: MIT
+keywords:
+  - continual learning
+  - spiking neural networks
+  - Maya Research Series
