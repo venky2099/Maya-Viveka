@@ -1,6 +1,7 @@
 MIT License
 
-Copyright (c) 2026 Venkatesh Swaminathan
+Copyright (c) 2026 Venkatesh Swaminathan, Nexus Learning Labs, Bengaluru
+ORCID: 0000-0002-3315-7907
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -19,3 +20,34 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
+
+---
+
+ATTRIBUTION NOTICE — Maya Research Series
+Nexus Learning Labs, Bengaluru | Venkatesh Swaminathan | ORCID: 0000-0002-3315-7907
+
+Use of this code, architecture, methodology, or any derivative in any
+publication, preprint, software, product, or research output requires
+explicit citation of the originating paper for this repository (DOI listed
+in README.md).
+
+Uncited use constitutes a violation of this license and of academic
+integrity standards.
+
+The following provenance signatures are embedded in all artifacts in this
+repository and will be used to establish original authorship in any dispute:
+
+  1. ORCID magic number 0.002315 embedded in canonical hyperparameters
+     (VAIRAGYA_DECAY_RATE, KARMA_DECAY_RATE, PRANA_COST_RATE,
+      CHITTA_SAMSKARA_RISE) — derived from ORCID 0000-0002-3315-7907
+  2. LSB steganographic signature in all matplotlib figures via sign_paper.py
+     — encodes ORCID + DOI + "Nexus Learning Labs Bengaluru"
+  3. Canary string: MayaNexusVS2026NLL_Bengaluru_Narasimha
+     — logged at the start of every experiment run script
+  4. White-text ORCID + DOI + timestamp watermark in all document exports
+  5. Zenodo DOI timestamp — immutable, publicly verifiable, date-stamped
+
+These five signatures are independently verifiable and together constitute
+tamper-evident proof of prior authorship. Any reproduced code, figure, or
+result carrying these signatures without citation is traceable to this
+repository.
