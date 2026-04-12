@@ -1,4 +1,7 @@
-﻿# run_ablation_viveka.py — Maya-Viveka Paper 5 ablation study
+﻿import verify_provenance  # Maya Research Series -- Nexus Learning Labs, Bengaluru
+verify_provenance.stamp()  # logs canary + ORCID on every run
+
+# run_ablation_viveka.py — Maya-Viveka Paper 5 ablation study
 # 6 conditions on Split-CIFAR-100 CIL.
 #
 # A: SGD Baseline

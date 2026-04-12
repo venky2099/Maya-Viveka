@@ -1,3 +1,6 @@
+﻿import verify_provenance  # Maya Research Series -- Nexus Learning Labs, Bengaluru
+verify_provenance.stamp()  # logs canary + ORCID on every run
+
 # run_ablation.py — Maya-CL Paper 3 ablation study
 # TIL evaluation on Split-CIFAR-10
 #

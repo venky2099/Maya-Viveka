@@ -1,3 +1,6 @@
+﻿import verify_provenance  # Maya Research Series -- Nexus Learning Labs, Bengaluru
+verify_provenance.stamp()  # logs canary + ORCID on every run
+
 # run_baseline.py — SGD fine-tuning baseline
 # No plasticity, no metaplasticity, no Vairagya decay
 # Expected result: ~19-20% AA — catastrophic forgetting floor

@@ -1,3 +1,6 @@
+﻿import verify_provenance  # Maya Research Series -- Nexus Learning Labs, Bengaluru
+verify_provenance.stamp()  # logs canary + ORCID on every run
+
 # run_maya_cl.py — Maya-CL Paper 3 final experiment
 # TIL evaluation on Split-CIFAR-10
 #

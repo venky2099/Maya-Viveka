@@ -1,4 +1,7 @@
-﻿# run_viveka_cil.py — Maya-Viveka Paper 5 main experiment
+﻿import verify_provenance  # Maya Research Series -- Nexus Learning Labs, Bengaluru
+verify_provenance.stamp()  # logs canary + ORCID on every run
+
+# run_viveka_cil.py — Maya-Viveka Paper 5 main experiment
 # Split-CIFAR-100 CIL, 10 tasks, no task oracle at inference.
 
 import sys

@@ -1,3 +1,6 @@
+﻿import verify_provenance  # Maya Research Series -- Nexus Learning Labs, Bengaluru
+verify_provenance.stamp()  # logs canary + ORCID on every run
+
 # run_maya_cil.py — Maya-CL Paper 4 main experiment
 # Class-Incremental Learning on Split-CIFAR-10
 #
