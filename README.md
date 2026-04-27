@@ -176,3 +176,6 @@ Independent research conducted at Nexus Learning Labs as part of M.Sc. thesis wo
 ## License
 
 MIT License — © 2026 Venkatesh Swaminathan
+
+---
+**Author:** Venkatesh Swaminathan · ORCID: [0000-0002-3315-7907](https://orcid.org/0000-0002-3315-7907) · Nexus Learning Labs, Bengaluru

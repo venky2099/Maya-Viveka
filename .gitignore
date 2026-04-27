@@ -30,3 +30,9 @@ maya_smriti_dashboard.html
 # Checkpoints
 *.pth
 *.ckpt
+
+# Added by fix_all_repos.py
+*.jsonl
+*.csv
+.env
+.maya_provenance.log
